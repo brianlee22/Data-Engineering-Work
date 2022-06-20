@@ -4,7 +4,7 @@ SELECT COUNT(*), COUNT(DISTINCT uuid) FROM db.consumer_profile_dim WHERE active_
 
 --SELECT COUNT(*), COUNT(DISTINCT uuid), COUNT(DISTINCT email)
 SELECT uuid, email
-FROM (SELECT uuid, email, ROW_NUMBERS() OVER(PARTITION BY email ORDER BY last_update_ts DESC) AS rownum
+FROM (SELECT uuid, email, ROW_NUMBER() OVER(PARTITION BY email ORDER BY last_update_ts DESC) AS rownum
 FROM (SELECT DISTINCT uuid, lower(email_address) AS email, last_update_ts FROM
 (SELECT * FROM db.consumer_profile_dim WHERE active_flag=1)
 JOIN hybris.users ON lower(email_address) = lower(p_uid))) WHERE rownum=1;
